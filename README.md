@@ -6,5 +6,6 @@ This is a clone of the lsh, a simplistic shell program created by [Stephen Brenn
  <li>cd</li>
  <li>help</li>
  <li>exit</li>
+ <li>Copy(cp)</li>
 </ul>
 However, I intent to add more in future.
