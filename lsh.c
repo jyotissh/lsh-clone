@@ -29,15 +29,17 @@ char **lsh_split_line(char *line);
 int lsh_cd(char **args);
 int lsh_help(char **args);
 int lsh_exit(char **args);
+int lsh_cp(char **args);
 
 /*
-	Lis tof builtin commands, followed by their corresponding functions
+	List of builtin commands, followed by their corresponding functions
 */
 void lsh_loop(void);
 char *builtin_str[] ={
 	"cd",
 	"help",
-	"exit"
+	"exit",
+	"cp"
 };
 
 int main()
@@ -84,17 +86,17 @@ char *lsh_read_line(void)
 	while(1){
 		c = getchar();
 
-		if(c == EOF || c == '\n'){
+		if(c == EOF || c == '\n'){ // for no input
 			buffer[position] = '\0';
 			return  buffer;
-		}else{
+		}else{ // fi anything is typed on the input line
 			buffer[position] = c;
 		}
 		position++;
-		if(position >= bufsize){
+		if(position >= bufsize){ // for not running out of space
 			bufsize += LSH_RL_BUFSIZE;
 			buffer = realloc(buffer,bufsize);
-			if(!buffer){
+			if(!buffer){ // for checking allocation errors if buffer actually runs out of space
 				fprintf(stderr,  "lsh: allocation error\n");
 				exit(EXIT_FAILURE);
 			}
@@ -162,7 +164,8 @@ int lsh_launch(char **args)
 int (*builtin_func[]) (char **) = {
   &lsh_cd,
   &lsh_help,
-  &lsh_exit
+  &lsh_exit,
+  &lsh_cp
 };
 
 int lsh_num_builtins() {
@@ -201,6 +204,24 @@ int lsh_exit(char **args){
 	return 0;
 }
 
+int lsh_cp(char **args){
+    FILE *in,*out;
+    in = fopen(args[1],"r");
+    out = fopen(args[2],"w");
+    if(in == NULL || out == NULL){
+        printf("Error while opening file(s)\n");
+        return 1;
+    }
+
+    char c;
+    while( (c = fgetc(in)) != EOF){
+        fputc(c,out);
+    }
+    fclose(in);
+    fclose(out);
+    return 1;
+}
+
 int lsh_execute(char **args)
 {
 	int i;
@@ -210,11 +231,10 @@ int lsh_execute(char **args)
 	}
 
 	for(i = 0;i < lsh_num_builtins(); i++){
-		if(strcmp(args[0], builtin_str[i]) == 0){
+		if(strcmp(args[0], builtin_str[i]) == 0){ //compares first term (command) with the string array
 			return (*builtin_func[i])(args);
 		}
 	}
 	return lsh_launch(args);
 
 }
-
