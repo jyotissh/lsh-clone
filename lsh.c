@@ -30,6 +30,7 @@ int lsh_cd(char **args);
 int lsh_help(char **args);
 int lsh_exit(char **args);
 int lsh_cp(char **args);
+int lsh_touch(char **args);
 
 /*
 	List of builtin commands, followed by their corresponding functions
@@ -39,7 +40,8 @@ char *builtin_str[] ={
 	"cd",
 	"help",
 	"exit",
-	"cp"
+	"cp",
+	"touch"
 };
 
 int main()
@@ -165,7 +167,8 @@ int (*builtin_func[]) (char **) = {
   &lsh_cd,
   &lsh_help,
   &lsh_exit,
-  &lsh_cp
+  &lsh_cp,
+  &lsh_touch
 };
 
 int lsh_num_builtins() {
@@ -191,7 +194,7 @@ int lsh_help(char **args)
 {
 	int i;
 	printf("LSH \n");
-	printf("Type program names and arguments, andhit enter.\n");
+	printf("Type program names and arguments, and hit enter.\n");
 	printf("The following are built in:\n");
 	for(i = 0;i<lsh_num_builtins();i++){
 		printf(" %s\n", builtin_str[i]);
@@ -219,6 +222,13 @@ int lsh_cp(char **args){
     }
     fclose(in);
     fclose(out);
+    return 1;
+}
+
+int lsh_touch(char **args){
+    FILE *file;
+    file = fopen(args[1],"a");
+    fclose(file);
     return 1;
 }
 
