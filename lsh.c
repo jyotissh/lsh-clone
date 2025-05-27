@@ -31,6 +31,7 @@ int lsh_help(char **args);
 int lsh_exit(char **args);
 int lsh_cp(char **args);
 int lsh_touch(char **args);
+int lsh_rm(char **args);
 
 /*
 	List of builtin commands, followed by their corresponding functions
@@ -41,7 +42,8 @@ char *builtin_str[] ={
 	"help",
 	"exit",
 	"cp",
-	"touch"
+	"touch",
+	"rm"
 };
 
 int main()
@@ -159,16 +161,13 @@ int lsh_launch(char **args)
 	return 1;
 }
 
-
-
-
-
 int (*builtin_func[]) (char **) = {
   &lsh_cd,
   &lsh_help,
   &lsh_exit,
   &lsh_cp,
-  &lsh_touch
+  &lsh_touch,
+  &lsh_rm
 };
 
 int lsh_num_builtins() {
@@ -229,6 +228,12 @@ int lsh_touch(char **args){
     FILE *file;
     file = fopen(args[1],"a");
     fclose(file);
+    return 1;
+}
+
+int lsh_rm(char **args){
+    remove(args[1]);
+    printf("File removed\n");
     return 1;
 }
 
