@@ -7,5 +7,7 @@ This is a clone of the lsh, a simplistic shell program created by [Stephen Brenn
  <li>help</li>
  <li>exit</li>
  <li>Copy(cp)</li>
+ <li>touch</li>
+ <li>rm</li>
 </ul>
 However, I intent to add more in future.

@@ -161,10 +161,6 @@ int lsh_launch(char **args)
 	return 1;
 }
 
-
-
-
-
 int (*builtin_func[]) (char **) = {
   &lsh_cd,
   &lsh_help,
